@@ -15,7 +15,6 @@
         <h2 class="text-xl font-semibold text-gray-800">Matched Artist 21</h2>
         <div class="mt-6 px-6">
           <p class="text-gray-600">usertest@gmail.com</p>
-          <p class="text-gray-600 mt-2">login with Google</p>
         </div>
       </div>
 
