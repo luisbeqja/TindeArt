@@ -4,6 +4,7 @@ import { supabase } from '../utils/supabase'
 // Import components
 import User from '../views/User.vue'
 import Login from '../views/Login.vue'
+import Explore from '../views/explore/Explore.vue'
 
 
 const router = createRouter({
@@ -16,11 +17,21 @@ const router = createRouter({
             meta: { requiresAuth: true }
         },
         {
+            path: '/explore',
+            name: 'Explore',
+            component: Explore,
+            meta: { requiresAuth: false }
+        },
+        {
             path: '/login',
             name: 'Login',
             component: Login,
             meta: { requiresAuth: false }
         },
+        {
+            path: '/',
+            redirect: '/explore'
+        }
     ]
 })
 
@@ -33,9 +44,9 @@ router.beforeEach(async (to) => {
         return { name: 'Login' }
     }
 
-    // Redirect to swipe if logged-in user tries to access login
+    // Redirect to explore if logged-in user tries to access login
     if (to.name === 'Login' && user) {
-        return { name: 'User' }
+        return { name: 'Explore' }
     }
 })
 
