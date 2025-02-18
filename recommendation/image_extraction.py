@@ -1,3 +1,4 @@
+import json
 import numpy as np
 from PIL import Image
 import os
@@ -147,14 +148,27 @@ def example_usage():
     extractor = ImageFeatureExtractor()
     
     # Extract features from a single image
-    image_path = "../client/src/assets/art/monalisa.jpg"
+    """     image_path = "../client/src/assets/art/monalisa.jpg"
     features = extractor.extract_features(image_path)
-    print(f"Extracted {len(features)} features from image")
+    print(f"Extracted {len(features)} features from image") """
     
-    # Or process an entire directory
-    directory_path = "../client/src/assets/art/"
+    # Process an entire directory
+    directory_path = "wikiart_images/"
     artwork_features = extractor.process_directory(directory_path)
-    print(f"Processed {artwork_features} images")
+    print(f"Processed {len(artwork_features)} images")
+
+    # Convert NumPy arrays to lists for JSON serialization
+    def convert_features(obj):
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()  # Convert ndarray to list
+        raise TypeError(f"Object of type {type(obj)} is not JSON serializable")
+
+    # Save to JSON file
+    json_path = "artwork_features.json"
+    with open(json_path, "w") as json_file:
+        json.dump(artwork_features, json_file, indent=4, default=convert_features)
+
+    print(f"Saved artwork features to {json_path}")
     
     return artwork_features
 

@@ -37,6 +37,7 @@ StyleGAN | CNN Classifiers | CLIP | OpenAI API
 
 **Database**  
 Supabase (PostgreSQL)
+Huggingface dataset
 
 ## Installation
 ### Frontend Setup
