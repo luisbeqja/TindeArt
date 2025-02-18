@@ -114,7 +114,7 @@ class ArtRecommender:
         
         Returns:
         list of artwork IDs sorted by predicted preference
-        """
+        """        
         if not self.artwork_features:
             raise ValueError("No artwork features processed. Call process_artwork_features first.")
         
@@ -181,14 +181,12 @@ class ArtRecommender:
 
 
 # Example usage
-def example_usage():
+def example_usage(recommender):
     # Initialize recommender
     # Load JSON from a file
     print(os.getcwd())
     with open(os.path.join(os.getcwd(), 'racomandation/artwork_features.json'), 'r') as file:
         data = json.load(file)
-
-    recommender = ArtRecommender()
     
     artwork_features = data
     
@@ -197,40 +195,9 @@ def example_usage():
     
     # Simulate user swipes
     user_id = 'user1'
-    recommender.record_swipe(user_id, 'image_242.jpg', liked=True)
-    recommender.record_swipe(user_id, 'image_422.jpg', liked=True)
-    recommender.record_swipe(user_id, 'image_215.jpg', liked=True)
-    recommender.record_swipe(user_id, 'image_12.jpg', liked=True)
-    recommender.record_swipe(user_id, 'image_220.jpg', liked=True)
-    recommender.record_swipe(user_id, 'image_110.jpg', liked=False)
-    recommender.record_swipe(user_id, 'image_283.jpg', liked=True)
-    recommender.record_swipe(user_id, 'image_145.jpg', liked=False)
-    recommender.record_swipe(user_id, 'image_150.jpg', liked=True)
-    recommender.record_swipe(user_id, 'image_289.jpg', liked=True)
-    recommender.record_swipe(user_id, 'image_161.jpg', liked=False)
-    recommender.record_swipe(user_id, 'image_492.jpg', liked=False)
-    recommender.record_swipe(user_id, 'image_255.jpg', liked=False)
-    recommender.record_swipe(user_id, 'image_321.jpg', liked=True)
-    recommender.record_swipe(user_id, 'image_364.jpg', liked=False)
-    recommender.record_swipe(user_id, 'image_136.jpg', liked=False)
-    recommender.record_swipe(user_id, 'image_119.jpg', liked=True)
-    recommender.record_swipe(user_id, 'image_245.jpg', liked=True)
-    recommender.record_swipe(user_id, 'image_193.jpg', liked=True)
-    recommender.record_swipe(user_id, 'image_299.jpg', liked=True)
-    recommender.record_swipe(user_id, 'image_163.jpg', liked=True)
-    recommender.record_swipe(user_id, 'image_156.jpg', liked=True)
-    recommender.record_swipe(user_id, 'image_229.jpg', liked=True)
-    recommender.record_swipe(user_id, 'image_274.jpg', liked=True)
-    recommender.record_swipe(user_id, 'image_268.jpg', liked=False)
-    recommender.record_swipe(user_id, 'image_478.jpg', liked=False)
-    recommender.record_swipe(user_id, 'image_423.jpg', liked=False)
-    recommender.record_swipe(user_id, 'image_330.jpg', liked=False)
-    recommender.record_swipe(user_id, 'image_453.jpg', liked=True)
-    recommender.record_swipe(user_id, 'image_142.jpg', liked=True)
     
     print(f"User preferences: {recommender.user_preferences}")
     # Get recommendations
     recommendations = recommender.get_recommendations(user_id)
-    print(f"Recommended artworks: {recommendations}")
         
     return {"recommendations": recommendations}

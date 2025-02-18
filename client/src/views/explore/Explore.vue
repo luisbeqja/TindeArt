@@ -39,15 +39,17 @@ export default {
     },
   },
   mounted() {
-    this.fetchRecommendations()
+    this.fetchRecommendations();
   },
   methods: {
     handleLike(artwork) {
-      console.log('Liked:', artwork.title);
+      console.log('Liked:', this.currentArtwork?.filename);
+      this.fetchAfterLikes(true);
       this.nextArtwork();
     },
     handleDislike(artwork) {
-      console.log('Disliked:', artwork.title);
+      console.log('Disliked:', this.currentArtwork?.filename);
+      this.fetchAfterLikes(false);
       this.nextArtwork();
     },
     handleInfo(artwork) {
@@ -64,11 +66,37 @@ export default {
     },
     async fetchRecommendations() {
       try {
-        const response = await fetch('http://127.0.0.1:5000/api/test/recommendations');
+        const response = await fetch(
+          'http://127.0.0.1:5000/api/recommendations'
+        );
         const data = await response.json();
-        console.log('Recommendations:', data);
-        this.artworks = data.recommendations
-        // TODO: Handle the recommendations data
+
+        this.artworks = data.recommendations;
+        this.artworks.push({
+          title: 'Loading',
+        });
+      } catch (error) {
+        console.error('Error fetching recommendations:', error);
+      }
+    },
+    async fetchAfterLikes(like) {
+      try {
+        const params = new URLSearchParams({
+          userid: 'user1',
+          image: this.currentArtwork?.filename || '',
+          liked: like.toString(),
+        });
+        const response = await fetch(
+          `http://127.0.0.1:5000/api/swipe?${params}`
+        );
+        if (this.currentIndex > 9) {
+          const data = await response.json();
+          this.artworks = data.recommendations;
+          this.artworks.push({
+            title: 'Loading',
+          });
+          this.currentIndex = 0;
+        }
       } catch (error) {
         console.error('Error fetching recommendations:', error);
       }
@@ -80,8 +108,9 @@ export default {
 <style scoped>
 .explore-container {
   padding: 20px;
-  margin: 0 auto;
+  margin: 0;
   width: 100%;
   max-height: 100%;
+  max-width: 400px;
 }
 </style>

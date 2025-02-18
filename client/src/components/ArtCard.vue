@@ -64,7 +64,7 @@ export default {
       this.$emit('info', this.artwork);
     },
     animateSwipe(direction) {
-      this.offset = direction * window.innerWidth;
+      this.offset = direction * 600;
       this.rotation = direction * 20;
       setTimeout(() => {
         this.offset = 0;

@@ -23,7 +23,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center h-screen w-screen">
+  <div class="flex flex-col justify-center h-screen w-screen p-14">
     <router-view />
   </div>
 </template>
