@@ -1,12 +1,14 @@
 <template>
-  <div class="explore-container">
+  <div class="explore-container flex">
     <ArtCard
       v-if="currentArtwork"
       :artwork="currentArtwork"
+      :isLoading="isLoading"
       @like="handleLike"
       @dislike="handleDislike"
       @info="handleInfo"
     />
+    <p>Test</p>
   </div>
 </template>
 
@@ -31,6 +33,7 @@ export default {
         },
       ],
       currentIndex: 0,
+      isLoading: false
     };
   },
   computed: {
@@ -65,6 +68,7 @@ export default {
       }
     },
     async fetchRecommendations() {
+      console.log('Fetching recommendations');
       try {
         const response = await fetch(
           'http://127.0.0.1:5000/api/recommendations'
@@ -80,17 +84,16 @@ export default {
       }
     },
     async fetchAfterLikes(like) {
+      this.isLoading = true;
       try {
         const params = new URLSearchParams({
           userid: 'user1',
           image: this.currentArtwork?.filename || '',
-          liked: like.toString(),
+          liked: like.toString()
         });
-        const response = await fetch(
-          `http://127.0.0.1:5000/api/swipe?${params}`
-        );
+        const response = await fetch(`http://127.0.0.1:5000/api/swipe?${params}`);
+        const data = await response.json();
         if (this.currentIndex > 9) {
-          const data = await response.json();
           this.artworks = data.recommendations;
           this.artworks.push({
             title: 'Loading',
@@ -99,6 +102,8 @@ export default {
         }
       } catch (error) {
         console.error('Error fetching recommendations:', error);
+      } finally {
+        this.isLoading = false;
       }
     },
   },

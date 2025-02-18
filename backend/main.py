@@ -26,17 +26,18 @@ def hello_world():
     return example_usage()
 
 
+@app.route("/api/user_preferences")
+def user_preferences():
+    return recommender.user_preferences
+
+
 
 @app.route("/api/swipe")
-def recommendations():
+def handle_swipe():
     # Get query parameters
     userid = request.args.get('userid')
     image = request.args.get('image')
     liked = request.args.get('liked').lower() == 'true'  # Convert string to boolean
-
-    # Initialize recommender
-    # Load JSON from a file
-    print(os.getcwd())
 
     # Record user swipe
     recommender.record_swipe(userid, image, liked=liked)
@@ -46,5 +47,5 @@ def recommendations():
     return format_recommendations({"recommendations": recommendations})
 
 @app.route("/api/recommendations")
-def recommendations_test():    
+def get_recommendations():    
     return format_recommendations(example_usage(recommender))

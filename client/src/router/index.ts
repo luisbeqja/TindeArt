@@ -20,7 +20,7 @@ const router = createRouter({
             path: '/explore',
             name: 'Explore',
             component: Explore,
-            meta: { requiresAuth: false }
+            meta: { requiresAuth: true }
         },
         {
             path: '/login',

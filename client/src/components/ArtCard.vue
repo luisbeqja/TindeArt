@@ -12,13 +12,13 @@
         </div>
       </div>
       <div class="action-buttons">
-        <button class="action-button dislike" @click="handleDislike">
+        <button class="action-button dislike" @click="handleDislike" :disabled="isLoading">
           <span class="icon">✕</span>
         </button>
-        <button class="action-button info" @click="handleInfo">
+        <button class="action-button info" @click="handleInfo" :disabled="isLoading">
           <span class="icon">i</span>
         </button>
-        <button class="action-button like" @click="handleLike">
+        <button class="action-button like" @click="handleLike" :disabled="isLoading">
           <span class="icon">♥</span>
         </button>
       </div>
@@ -42,6 +42,10 @@ export default {
         imageUrl: '',
       }),
     },
+    isLoading: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -158,6 +162,16 @@ export default {
 
 .action-button:hover {
   transform: scale(1.1);
+}
+
+.action-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.action-button:disabled:hover {
+  transform: none;
 }
 
 .action-button.dislike {

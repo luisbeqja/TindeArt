@@ -14,7 +14,29 @@ class ArtRecommender:
         self.user_preferences = {}
         self.artwork_features = {}
         self.is_classifier_trained = {}  # Track training status for each user
+        self.preferences_file = os.path.join(os.getcwd(), 'racomandation/user_preferences.json')
+        self._load_preferences()  # Load existing preferences on initialization
         
+    def _load_preferences(self):
+        """Load user preferences from JSON file if it exists"""
+        try:
+            if os.path.exists(self.preferences_file):
+                with open(self.preferences_file, 'r') as file:
+                    self.user_preferences = json.load(file)
+                print(f"Loaded preferences for {len(self.user_preferences)} users")
+        except Exception as e:
+            print(f"Error loading preferences: {e}")
+            self.user_preferences = {}
+
+    def _save_preferences(self):
+        """Save user preferences to JSON file"""
+        try:
+            with open(self.preferences_file, 'w') as file:
+                json.dump(self.user_preferences, file, indent=2)
+            print("Preferences saved successfully")
+        except Exception as e:
+            print(f"Error saving preferences: {e}")
+
     def process_artwork_features(self, artwork_data):
         """
         Process artwork features (colors, style, composition, etc.)
@@ -62,6 +84,9 @@ class ArtRecommender:
             self.user_preferences[user_id]['liked'].append(artwork_id)
         else:
             self.user_preferences[user_id]['disliked'].append(artwork_id)
+            
+        # Save preferences after each update
+        self._save_preferences()
             
         # Train classifier if enough data is available
         self._train_classifier(user_id)
