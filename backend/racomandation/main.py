@@ -1,4 +1,5 @@
 import json
+import os
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics.pairwise import cosine_similarity
@@ -183,7 +184,8 @@ class ArtRecommender:
 def example_usage():
     # Initialize recommender
     # Load JSON from a file
-    with open('artwork_features.json', 'r') as file:
+    print(os.getcwd())
+    with open(os.path.join(os.getcwd(), 'racomandation/artwork_features.json'), 'r') as file:
         data = json.load(file)
 
     recommender = ArtRecommender()
@@ -225,13 +227,10 @@ def example_usage():
     recommender.record_swipe(user_id, 'image_330.jpg', liked=False)
     recommender.record_swipe(user_id, 'image_453.jpg', liked=True)
     recommender.record_swipe(user_id, 'image_142.jpg', liked=True)
-
     
     print(f"User preferences: {recommender.user_preferences}")
     # Get recommendations
     recommendations = recommender.get_recommendations(user_id)
     print(f"Recommended artworks: {recommendations}")
-    return recommendations
-
-if __name__ == "__main__":
-    example_usage()
+        
+    return {"recommendations": recommendations}

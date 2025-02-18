@@ -1,12 +1,14 @@
 <template>
   <div class="art-card-container">
-    <div class="art-card" :style="{ transform: `translateX(${offset}px) rotate(${rotation}deg)` }">
+    <div
+      class="art-card"
+      :style="{ transform: `translateX(${offset}px) rotate(${rotation}deg)` }"
+    >
       <div class="art-image-container">
-        <img :src="artwork.imageUrl" :alt="artwork.title" class="art-image">
+        <img :src="imgUrl" :alt="artwork.title" class="art-image" />
         <div class="art-info">
-          <h2>{{ artwork.title }}</h2>
-          <p>{{ artwork.museum }}</p>
-          <p>{{ artwork.artist }}</p>
+          <h2>{{ artist }}</h2>
+          <p>{{ gener }}</p>
         </div>
       </div>
       <div class="action-buttons">
@@ -25,6 +27,8 @@
 </template>
 
 <script>
+import dataset from './dataset.json';
+
 export default {
   name: 'ArtCard',
   props: {
@@ -35,40 +39,51 @@ export default {
         title: '',
         artist: '',
         museum: '',
-        imageUrl: ''
-      })
-    }
+        imageUrl: '',
+      }),
+    },
   },
   data() {
     return {
       offset: 0,
       rotation: 0,
       isDragging: false,
-      startX: 0
-    }
+      startX: 0,
+    };
   },
   methods: {
     handleLike() {
-      this.animateSwipe(1)
-      this.$emit('like', this.artwork)
+      this.animateSwipe(1);
+      this.$emit('like', this.artwork);
     },
     handleDislike() {
-      this.animateSwipe(-1)
-      this.$emit('dislike', this.artwork)
+      this.animateSwipe(-1);
+      this.$emit('dislike', this.artwork);
     },
     handleInfo() {
-      this.$emit('info', this.artwork)
+      this.$emit('info', this.artwork);
     },
     animateSwipe(direction) {
-      this.offset = direction * window.innerWidth
-      this.rotation = direction * 20
+      this.offset = direction * window.innerWidth;
+      this.rotation = direction * 20;
       setTimeout(() => {
-        this.offset = 0
-        this.rotation = 0
-      }, 300)
+        this.offset = 0;
+        this.rotation = 0;
+      }, 300);
+    },
+  },
+  computed: {
+    gener() {
+      return dataset?.features?.genre?.names[Number(this.artwork.genre)]
+    },
+    artist() {
+      return dataset?.features?.artist?.names[Number(this.artwork.genre)]
+    },
+    imgUrl() {
+      return `/wikiart_images/${this.artwork.filename}`
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -163,4 +178,4 @@ export default {
 .icon {
   font-size: 24px;
 }
-</style> 
+</style>

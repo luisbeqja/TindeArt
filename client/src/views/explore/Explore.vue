@@ -13,9 +13,6 @@
 <script>
 import ArtCard from '../../components/ArtCard.vue';
 import starryNight from '../../assets/art/The_Starry_Night_Van_Gogh.jpg';
-import portraitJeanne from '../../assets/art/Portrait_of_Jeanne_Modigliani.jpg';
-import monaLisa from '../../assets/art/monalisa.jpg';
-import theScream from '../../assets/art/the-scheam.jpg';
 
 export default {
   name: 'Explore',
@@ -26,31 +23,11 @@ export default {
     return {
       artworks: [
         {
-          title: 'The Starry Night',
+          title: 'Loading',
           artist: 'Vincent van Gogh',
           museum: 'Museum of Modern Art, New York City',
           imageUrl: starryNight,
           tags: ['Post-Impressionism', 'Nightscape', 'Swirling patterns'],
-        },
-        {
-          title: 'Portrait of Jeanne',
-          artist: 'Amedeo Modigliani',
-          museum: 'Kunsthaus Zürich',
-          imageUrl: portraitJeanne,
-        },
-        {
-          title: 'Mona Lisa',
-          artist: 'Leonardo da Vinci',
-          museum: 'Louvre Museum, Paris',
-          imageUrl: monaLisa,
-          tags: ['Renaissance', 'Portrait', 'Sfumato'],
-        },
-        {
-          title: 'The Scream',
-          artist: 'Edvard Munch',
-          museum: 'National Museum, Oslo',
-          imageUrl: theScream,
-          tags: ['Expressionism', 'Anxiety', 'Landscape'],
         },
       ],
       currentIndex: 0,
@@ -60,6 +37,9 @@ export default {
     currentArtwork() {
       return this.artworks[this.currentIndex];
     },
+  },
+  mounted() {
+    this.fetchRecommendations()
   },
   methods: {
     handleLike(artwork) {
@@ -80,6 +60,17 @@ export default {
       } else {
         // Handle end of artworks
         console.log('No more artworks to show');
+      }
+    },
+    async fetchRecommendations() {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/api/test/recommendations');
+        const data = await response.json();
+        console.log('Recommendations:', data);
+        this.artworks = data.recommendations
+        // TODO: Handle the recommendations data
+      } catch (error) {
+        console.error('Error fetching recommendations:', error);
       }
     },
   },
