@@ -39,7 +39,7 @@ class ArtRecommender:
         # Store processed features
         for idx, art_id in enumerate(artwork_data.keys()):
             self.artwork_features[art_id] = features_reduced[idx]
-            
+                    
         print(f"Processed {len(artwork_data)} artworks. Feature dimension reduced from {n_features} to {n_components}")
     
     def record_swipe(self, user_id, artwork_id, liked):
@@ -73,6 +73,7 @@ class ArtRecommender:
         
         print(f"User {user_id} has {liked_count} likes and {disliked_count} dislikes")
         
+        # Skip training if not enough data
         if liked_count < 2 or disliked_count < 2:
             self.is_classifier_trained[user_id] = False
             return
@@ -261,11 +262,14 @@ def example_usage():
     
     # Simulate user swipes
     user_id = 'user1'
-    recommender.record_swipe(user_id, 'Portrait_of_Jeanne_Modigliani', liked=True)
-    recommender.record_swipe(user_id, 'Girl-With-A-Pearl-Earring-Wallpaper-Mural-88792671', liked=True)
-    recommender.record_swipe(user_id, 'the-scheam', liked=True)
-    recommender.record_swipe(user_id, 'The_Starry_Night_Van_Gogh', liked=False)
+    recommender.record_swipe(user_id, 'Portrait_of_Jeanne_Modigliani', liked=False)
+    recommender.record_swipe(user_id, 'Girl-With-A-Pearl-Earring-Wallpaper-Mural-88792671', liked=False)
+    recommender.record_swipe(user_id, 'the-scheam', liked=False)
+    recommender.record_swipe(user_id, 'The_Starry_Night_Van_Gogh', liked=True)
+    recommender.record_swipe(user_id, 'dali-the-persistence-of-memory', liked=True)
     
+    
+    print(f"User preferences: {recommender.user_preferences}")
     # Get recommendations
     recommendations = recommender.get_recommendations(user_id)
     print(f"Recommended artworks: {recommendations}")
