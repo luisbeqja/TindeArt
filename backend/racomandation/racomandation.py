@@ -12,6 +12,7 @@ class ArtRecommender:
         self.pca = None
         self.classifier = RandomForestClassifier(n_estimators=100)
         self.user_preferences = {}
+        self.user_preferences_file_image = {}
         self.artwork_features = {}
         self.is_classifier_trained = {}  # Track training status for each user
         self.preferences_file = os.path.join(os.getcwd(), 'racomandation/user_preferences.json')
@@ -23,6 +24,36 @@ class ArtRecommender:
             if os.path.exists(self.preferences_file):
                 with open(self.preferences_file, 'r') as file:
                     self.user_preferences = json.load(file)
+                # Convert user preferences to include artwork features
+                for user_id, preferences in self.user_preferences.items():
+                    self.user_preferences_file_image[user_id] = {
+                        'liked': [],
+                        'disliked': []
+                    }
+                    
+                    # Load artwork features from json file
+                    artwork_features_file = os.path.join(os.getcwd(), 'racomandation/artwork_features.json')
+                    with open(artwork_features_file, 'r') as file:
+                        artwork_data = json.load(file)
+                    
+                    # Process liked images
+                    if 'liked' in preferences:
+                        for image_name in preferences['liked']:
+                            if image_name in artwork_data:
+                                self.user_preferences_file_image[user_id]['liked'].append({
+                                    'file_name': image_name,
+                                    'file_data': artwork_data[image_name]
+                                })
+                                
+                    # Process disliked images            
+                    if 'disliked' in preferences:
+                        for image_name in preferences['disliked']:
+                            if image_name in artwork_data:
+                                self.user_preferences_file_image[user_id]['disliked'].append({
+                                    'file_name': image_name,
+                                    'file_data': artwork_data[image_name]
+                                })
+                    
                 print(f"Loaded preferences for {len(self.user_preferences)} users")
         except Exception as e:
             print(f"Error loading preferences: {e}")
@@ -221,7 +252,6 @@ def example_usage(recommender):
     # Simulate user swipes
     user_id = 'user1'
     
-    print(f"User preferences: {recommender.user_preferences}")
     # Get recommendations
     recommendations = recommender.get_recommendations(user_id)
         

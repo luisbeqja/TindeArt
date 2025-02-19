@@ -2,7 +2,7 @@ import csv
 import json
 import os
 from flask import Flask, request
-from racomandation.main import ArtRecommender, example_usage
+from racomandation.racomandation import ArtRecommender, example_usage
 from flask_cors import CORS
 from utils import format_recommendations
 

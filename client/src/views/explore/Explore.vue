@@ -14,7 +14,7 @@
       </h3>
       <NeuralNetwork :isLearning="isLoading" />
       <div class="stats mt-4">
-        <p class="text-xl text-gray-800">User: {{ userEmail }}</p>
+        <p class="text-xl text-gray-800">{{ userEmail }}</p>
         <p class="text-sm text-gray-600">
           Liked: {{ userPreferences.liked.length }} artworks
         </p>
@@ -23,6 +23,7 @@
         </p>
       </div>
     </div>
+    <Documentation />
   </div>
 </template>
 
@@ -31,12 +32,14 @@ import { ref, onMounted } from 'vue';
 import { supabase } from '../../utils/supabase';
 import ArtCard from '../../components/ArtCard.vue';
 import NeuralNetwork from '../../components/NeuralNetwork.vue';
+import Documentation from '../../components/Documentation.vue';
 
 export default {
   name: 'Explore',
   components: {
     ArtCard,
     NeuralNetwork,
+    Documentation,
   },
   data() {
     return {
@@ -64,7 +67,7 @@ export default {
     },
     userEmail() {
       return this.user?.email || 'Guest';
-    }
+    },
   },
   async mounted() {
     await this.fetchUserData();
@@ -74,7 +77,9 @@ export default {
   methods: {
     async fetchUserData() {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
         this.user = user;
         console.log('User data fetched:', user?.email);
       } catch (error) {
@@ -103,9 +108,14 @@ export default {
     },
     async fetchUserPreferences() {
       try {
-        const response = await fetch('http://127.0.0.1:5000/api/user_preferences');
+        const response = await fetch(
+          'http://127.0.0.1:5000/api/user_preferences'
+        );
         const data = await response.json();
-        this.userPreferences = data[this.user?.id] || { liked: [], disliked: [] };
+        this.userPreferences = data[this.user?.id] || {
+          liked: [],
+          disliked: [],
+        };
       } catch (error) {
         console.error('Error fetching user preferences:', error);
       }
@@ -113,7 +123,9 @@ export default {
     async fetchRecommendations() {
       console.log('Fetching recommendations');
       try {
-        const response = await fetch('http://127.0.0.1:5000/api/recommendations');
+        const response = await fetch(
+          'http://127.0.0.1:5000/api/recommendations'
+        );
         const data = await response.json();
         this.artworks = data.recommendations;
       } catch (error) {
@@ -128,7 +140,9 @@ export default {
           image: this.currentArtwork?.filename || '',
           liked: like.toString(),
         });
-        const response = await fetch(`http://127.0.0.1:5000/api/swipe?${params}`);
+        const response = await fetch(
+          `http://127.0.0.1:5000/api/swipe?${params}`
+        );
         const data = await response.json();
         if (data.recommendations && this.currentIndex > 8) {
           this.artworks = data.recommendations;
@@ -154,7 +168,7 @@ export default {
 
 .neural-network-container {
   flex: 1;
-  min-width: 300px;
+  min-width: 400px;
   padding: 20px;
   background: white;
   border-radius: 10px;
