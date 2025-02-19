@@ -9,10 +9,12 @@
       @info="handleInfo"
     />
     <div class="neural-network-container">
-      <h3 class="text-lg font-semibold mb-2 text-gray-800">AI Learning Progress</h3>
+      <h3 class="text-lg font-semibold mb-2 text-gray-800">
+        AI Learning Progress
+      </h3>
       <NeuralNetwork :isLearning="isLoading" />
       <div class="stats mt-4">
-        <p class="text-xl text-gray-800">User: {{ user?.email || 'Guest' }}</p>
+        <p class="text-xl text-gray-800">User: {{ userEmail }}</p>
         <p class="text-sm text-gray-600">
           Liked: {{ userPreferences.liked.length }} artworks
         </p>
@@ -34,22 +36,11 @@ export default {
   name: 'Explore',
   components: {
     ArtCard,
-    NeuralNetwork
-  },
-  setup() {
-    const user = ref(null);
-
-    onMounted(async () => {
-      const { data: { user: authUser } } = await supabase.auth.getUser();
-      user.value = authUser;
-    });
-
-    return {
-      user
-    };
+    NeuralNetwork,
   },
   data() {
     return {
+      user: null,
       artworks: [
         {
           title: 'Loading',
@@ -63,28 +54,39 @@ export default {
       isLoading: false,
       userPreferences: {
         liked: [],
-        disliked: []
-      }
+        disliked: [],
+      },
     };
   },
   computed: {
     currentArtwork() {
       return this.artworks[this.currentIndex];
     },
+    userEmail() {
+      return this.user?.email || 'Guest';
+    }
   },
-  mounted() {
+  async mounted() {
+    await this.fetchUserData();
     this.fetchRecommendations();
     this.fetchUserPreferences();
   },
   methods: {
+    async fetchUserData() {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        this.user = user;
+        console.log('User data fetched:', user?.email);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    },
     handleLike(artwork) {
-      console.log('Liked:', this.currentArtwork?.filename);
       this.userPreferences.liked.push(this.currentArtwork?.filename);
       this.fetchAfterLikes(true);
       this.nextArtwork();
     },
     handleDislike(artwork) {
-      console.log('Disliked:', this.currentArtwork?.filename);
       this.userPreferences.disliked.push(this.currentArtwork?.filename);
       this.fetchAfterLikes(false);
       this.nextArtwork();
@@ -103,7 +105,7 @@ export default {
       try {
         const response = await fetch('http://127.0.0.1:5000/api/user_preferences');
         const data = await response.json();
-        this.userPreferences = data.user1 || { liked: [], disliked: [] };
+        this.userPreferences = data[this.user?.id] || { liked: [], disliked: [] };
       } catch (error) {
         console.error('Error fetching user preferences:', error);
       }
@@ -124,11 +126,11 @@ export default {
         const params = new URLSearchParams({
           userid: this.user?.id || 'user1',
           image: this.currentArtwork?.filename || '',
-          liked: like.toString()
+          liked: like.toString(),
         });
         const response = await fetch(`http://127.0.0.1:5000/api/swipe?${params}`);
         const data = await response.json();
-        if (data.recommendations && this.currentIndex > 9) {
+        if (data.recommendations && this.currentIndex > 8) {
           this.artworks = data.recommendations;
           this.currentIndex = 0;
         }
@@ -137,7 +139,7 @@ export default {
       } finally {
         setTimeout(() => {
           this.isLoading = false;
-        }, 1000); // Keep animation visible for at least 1 second
+        }, 1000);
       }
     },
   },

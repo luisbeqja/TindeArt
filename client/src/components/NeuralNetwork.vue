@@ -2,57 +2,61 @@
   <div class="neural-network" :class="{ 'is-learning': isLearning }">
     <div class="layers-container">
       <svg class="connections" width="100%" height="100%">
-        <g v-for="(fromLayer, layerIndex) in ['output', 'hidden2', 'hidden1']" :key="layerIndex">
+        <g
+          v-for="(fromLayer, layerIndex) in ['output', 'hidden2', 'hidden1']"
+          :key="layerIndex"
+        >
           <path
             v-for="(_, fromIndex) in getLayerSize(fromLayer)"
             :key="fromIndex"
-            :class="{ active: isLearning && activeNeurons[fromLayer].includes(fromIndex + 1) }"
+            :class="{
+              active:
+                isLearning && activeNeurons[fromLayer].includes(fromIndex + 1),
+            }"
             :d="getConnectionPaths(fromLayer, fromIndex)"
             class="connection-line"
           />
         </g>
       </svg>
 
-        <!-- Output Layer (now at top) -->
+      <!-- Output Layer (top) -->
       <div class="layer output-layer">
-        <div v-for="i in 2" :key="'hidden2-'+i" class="neuron"
-          :class="{ active: isLearning && activeNeurons.output.includes(i) }">
-        </div>
-      </div>
-
-        <!-- Output Layer (now at top) -->
-      <div class="layer output-layer">
-        <div v-for="i in 3" :key="'output-'+i" class="neuron"
-          :class="{ active: isLearning && activeNeurons.output.includes(i) }">
-        </div>
-      </div>
-
-      <!-- Output Layer (now at top) -->
-      <div class="layer output-layer">
-        <div v-for="i in 4" :key="'hidden1-'+i" class="neuron"
-          :class="{ active: isLearning && activeNeurons.output.includes(i) }">
-        </div>
+        <div
+          v-for="i in 2"
+          :key="'output-' + i"
+          class="neuron"
+          :class="{ active: isLearning && activeNeurons.output.includes(i) }"
+        ></div>
       </div>
 
       <!-- Hidden Layer 2 -->
       <div class="layer hidden-layer">
-        <div v-for="i in 5" :key="'hidden2-'+i" class="neuron"
-          :class="{ active: isLearning && activeNeurons.hidden2.includes(i) }">
-        </div>
+        <div
+          v-for="i in 4"
+          :key="'hidden2-' + i"
+          class="neuron"
+          :class="{ active: isLearning && activeNeurons.hidden2.includes(i) }"
+        ></div>
       </div>
 
       <!-- Hidden Layer 1 -->
       <div class="layer hidden-layer">
-        <div v-for="i in 6" :key="'hidden1-'+i" class="neuron"
-          :class="{ active: isLearning && activeNeurons.hidden1.includes(i) }">
-        </div>
+        <div
+          v-for="i in 6"
+          :key="'hidden1-' + i"
+          class="neuron"
+          :class="{ active: isLearning && activeNeurons.hidden1.includes(i) }"
+        ></div>
       </div>
 
-      <!-- Input Layer (now at bottom) -->
+      <!-- Input Layer (bottom) -->
       <div class="layer input-layer">
-        <div v-for="i in 7" :key="'input-'+i" class="neuron" 
-          :class="{ active: isLearning && activeNeurons.input.includes(i) }">
-        </div>
+        <div
+          v-for="i in 8"
+          :key="'input-' + i"
+          class="neuron"
+          :class="{ active: isLearning && activeNeurons.input.includes(i) }"
+        ></div>
       </div>
     </div>
   </div>
@@ -64,8 +68,8 @@ export default {
   props: {
     isLearning: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -73,16 +77,16 @@ export default {
         input: [],
         hidden1: [],
         hidden2: [],
-        output: []
+        output: [],
       },
       animationInterval: null,
       layerSizes: {
         output: 2,
         hidden2: 4,
         hidden1: 6,
-        input: 7
-      }
-    }
+        input: 8,
+      },
+    };
   },
   methods: {
     getLayerSize(layer) {
@@ -101,10 +105,22 @@ export default {
       const prevLayerSize = this.layerSizes[prevLayer];
 
       for (let toIndex = 0; toIndex < prevLayerSize; toIndex++) {
-        const x1 = (fromLayer === 'output' ? 25 : fromLayer === 'hidden2' ? 41.6 : 58.3) + '%';
-        const x2 = (fromLayer === 'output' ? 41.6 : fromLayer === 'hidden2' ? 58.3 : 75) + '%';
-        const y1 = ((fromIndex + 1) * 100 / (this.layerSizes[fromLayer] + 1)) + '%';
-        const y2 = ((toIndex + 1) * 100 / (this.layerSizes[prevLayer] + 1)) + '%';
+        const x1 =
+          (fromLayer === 'output'
+            ? 25
+            : fromLayer === 'hidden2'
+            ? 41.6
+            : 58.3) + '%';
+        const x2 =
+          (fromLayer === 'output'
+            ? 41.6
+            : fromLayer === 'hidden2'
+            ? 58.3
+            : 75) + '%';
+        const y1 =
+          ((fromIndex + 1) * 100) / (this.layerSizes[fromLayer] + 1) + '%';
+        const y2 =
+          ((toIndex + 1) * 100) / (this.layerSizes[prevLayer] + 1) + '%';
 
         paths.push(`M ${x1} ${y1} C ${x2} ${y1}, ${x1} ${y2}, ${x2} ${y2}`);
       }
@@ -114,9 +130,9 @@ export default {
     startAnimation() {
       this.animationInterval = setInterval(() => {
         this.activeNeurons.output = this.getRandomNeurons(2, 1);
-        this.activeNeurons.hidden2 = this.getRandomNeurons(3, 2);
-        this.activeNeurons.hidden1 = this.getRandomNeurons(4, 2);
-        this.activeNeurons.input = this.getRandomNeurons(6, 3);
+        this.activeNeurons.hidden2 = this.getRandomNeurons(4, 2);
+        this.activeNeurons.hidden1 = this.getRandomNeurons(6, 3);
+        this.activeNeurons.input = this.getRandomNeurons(8, 4);
       }, 500);
     },
     stopAnimation() {
@@ -125,7 +141,7 @@ export default {
         input: [],
         hidden1: [],
         hidden2: [],
-        output: []
+        output: [],
       };
     },
     getRandomNeurons(total, count) {
@@ -137,7 +153,7 @@ export default {
         }
       }
       return neurons;
-    }
+    },
   },
   watch: {
     isLearning(newVal) {
@@ -146,18 +162,18 @@ export default {
       } else {
         this.stopAnimation();
       }
-    }
+    },
   },
   beforeUnmount() {
     this.stopAnimation();
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
 .neural-network {
   width: 100%;
-  height: 250px;
+  height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -177,6 +193,20 @@ export default {
   height: 100%;
   position: relative;
   margin: 0 auto;
+  padding: 20px 0;
+}
+
+.layer-labels {
+  position: absolute;
+  right: 10px;
+  top: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 0;
+  font-size: 12px;
+  color: #666;
 }
 
 .connections {
@@ -206,14 +236,14 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  gap: 15px;
+  gap: 12px;
   z-index: 1;
   position: relative;
 }
 
 .neuron {
-  width: 15px;
-  height: 15px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: #ddd;
   transition: all 0.3s ease;
@@ -260,4 +290,4 @@ export default {
     stroke-dashoffset: -10;
   }
 }
-</style> 
+</style>
