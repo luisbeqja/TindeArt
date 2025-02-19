@@ -1,22 +1,8 @@
 {
-  "user1": {
+  "a4bfe7e5-73fc-4274-8d42-f6283801a955": {
     "liked": [
-      "image_53.jpg",
-      "image_326.jpg",
-      "image_172.jpg",
-      "image_310.jpg",
-      "image_404.jpg",
-      "image_410.jpg",
-      "image_390.jpg",
-      "image_115.jpg",
-      "image_482.jpg",
-      "image_477.jpg"
+      "image_235.jpg"
     ],
-    "disliked": [
-      "image_300.jpg",
-      "image_436.jpg",
-      "image_196.jpg",
-      "image_348.jpg"
-    ]
+    "disliked": []
   }
 }

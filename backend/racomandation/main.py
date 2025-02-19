@@ -101,7 +101,7 @@ class ArtRecommender:
         print(f"User {user_id} has {liked_count} likes and {disliked_count} dislikes")
         
         # Skip training if not enough data
-        if liked_count < 2 or disliked_count < 2:
+        if liked_count < 5 or disliked_count < 5:
             self.is_classifier_trained[user_id] = False
             return
         

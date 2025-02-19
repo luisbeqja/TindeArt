@@ -93,8 +93,10 @@ export default {
 <style scoped>
 .art-card-container {
   width: 100%;
-  margin: 0 auto;
+  margin: 0 ;
   position: relative;
+  max-width: 400px;
+  z-index: 20;
 }
 
 .art-card {
