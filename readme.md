@@ -3,7 +3,7 @@
 
 [![Vue.js](https://img.shields.io/badge/Vue.js-4FC08D?logo=vuedotjs&logoColor=white)](https://vuejs.org/)
 [![Flask](https://img.shields.io/badge/Flask-000000?logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
-[![TensorFlow](https://img.shields.io/badge/TensorFlow-FF6F00?logo=tensorflow&logoColor=white)](https://www.tensorflow.org/)
+[![Scikit-learn](https://img.shields.io/badge/scikit-learn-FF6F00?logo=scikit-learn&logoColor=white)](https://www.scikit-learn.org/)
 [![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=white)](https://supabase.com/)
 
 ![ArtMatch Demo](assets/TindArtLike.png)
@@ -15,7 +15,7 @@ A Tinder-inspired art discovery platform that combines:
 ## Key Features
 ### Frontend (Vue.js)
 - 🎨 Swipe interface for art discovery
-- 📲 Google/Phone authentication
+- 📲 Google authentication
 - 📊 AI-generated style insights
 
 ### Backend (Flask + TensorFlow)
@@ -27,13 +27,13 @@ A Tinder-inspired art discovery platform that combines:
 
 ## Tech Stack
 **Frontend**  
-Vue.js | Tailwind CSS 
+Vue.js
 
 **Backend**  
-Flask | TensorFlow/Keras | OpenCV | NumPy
+Flask | OpenCV | NumPy
 
 **AI/ML**  
-StyleGAN | CNN Classifiers | CLIP | OpenAI API
+Scikit-learn
 
 **Database**  
 Supabase (PostgreSQL)
